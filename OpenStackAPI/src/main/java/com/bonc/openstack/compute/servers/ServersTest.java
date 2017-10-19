@@ -1,12 +1,12 @@
-package com.bonc.openstack.compute;
+package com.bonc.openstack.compute.servers;
 
 import org.openstack4j.api.OSClient.OSClientV3;
-import org.openstack4j.model.compute.Server;
+import org.openstack4j.model.common.ActionResponse;
 
-import com.bonc.openstack.utils.ComputeUtil;
 import com.bonc.openstack.utils.IdentityV3Util;
+import com.bonc.openstack.utils.ServerUtil;
 
-public class ComputeTest {
+public class ServersTest {
     public static void main(String[] args) {
         String serverURL = "http://172.16.40.21:35357";
         String userName = "admin";
@@ -20,10 +20,16 @@ public class ComputeTest {
 
         OSClientV3 os = IdentityV3Util.getOSClientV3(serverURL, userName, password, domainID, projectID);
 
-        // 程序结束，但，VM实例并没有真正创建完成哦
-        Server createServer = ComputeUtil.createServer(os, serverName, flavorId, imageId);
+        // 创建server VM实例并没有真正创建完成哦
+        // Server createServer = ComputeUtil.createServer(os, serverName,
+        // flavorId, imageId);
 
         System.out.println("------>");
+
+        ActionResponse delete = ServerUtil.buildServer(os).delete("57af9a82-56e5-4cd0-877b-1efff32900a2");
+        if (delete.isSuccess()) {
+            System.out.println("-----删除server实例----OK----");
+        }
 
     }
 }
